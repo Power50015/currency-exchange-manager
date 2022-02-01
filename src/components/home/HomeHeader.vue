@@ -1,10 +1,11 @@
 <template>
   <header class="container mx-auto">
     <div class="flex justify-between flex-wrap items-center">
-      <div
-        class="header-content lg:basis-1/2 animate__animated animate__backInRight lg:order-1 order-2 animate__slow	"
+      <div 
+        class="header-content lg:basis-1/2 animate__animated animate__backInRight lg:order-1 order-2 animate__slow"
       >
-        <h1 class="text-6xl leading-[5rem] font-black text-cyan-500 mb-8">
+        <div v-if="!IsLogin">
+          <h1 class="text-6xl leading-[5rem] font-black text-cyan-500 mb-8">
           أشترك الأن و كن أنت و شركتك شركاء فى النجاح
         </h1>
         <div class="text-center">
@@ -18,13 +19,19 @@
             >تسجيل الدخول / شركه</router-link
           >
         </div>
+        </div>
+        <div v-if="IsLogin" class="text-center">
+          <h3 class="text-6xl leading-[5rem] font-black text-cyan-500">{{UserName}}</h3>
+          <h3 class="text-4xl leading-[5rem] text-cyan-500">{{UserEmail}}</h3>
+        </div>
       </div>
-      <div class="lg:basis-1/2 animate__animated animate__slideInLeft overflow-hidden order-1">
+      <div
+        class="lg:basis-1/2 animate__animated animate__slideInLeft overflow-hidden order-1"
+      >
         <img
           src="@/assets/images/headerbg2.png"
           alt="header image"
           class="w-full header-img"
-
         />
       </div>
     </div>
@@ -32,7 +39,22 @@
 </template>
 
 <script>
-export default {};
+import { computed } from "@vue/runtime-core";
+import { useStore } from "vuex";
+
+export default {
+  name: "Header",
+  setup() {
+    const store = useStore();
+
+    const IsLogin = computed(() => store.state.isLogin);
+    const UserType = computed(() => store.state.userType);
+    const UserName = computed(() => store.state.userName);
+    const UserEmail = computed(() => store.state.userEmail);
+
+    return { IsLogin, UserType, UserName, UserEmail };
+  },
+};
 </script>
 
 <style>

@@ -19,6 +19,11 @@ const routes = [
     name: "EmployeeLogin",
     component: () => import("../views/EmployeeLogin.vue"),
   },
+  {
+    path: "/EmployeeCRUD",
+    name: "EmployeeCRUD",
+    component: () => import("../views/EmployeeCRUD.vue"),
+  },
 ];
 
 const router = createRouter({
