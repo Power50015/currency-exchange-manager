@@ -21,32 +21,32 @@ export default {
             .collection("companies")
             .where("companyEmail", "==", user.email);
 
-          docRef
-            .get()
-            .then((querySnapshot) => {
-              if (!querySnapshot.empty) {
-                querySnapshot.forEach((doc) => {
-                  store.commit("authUser", {
-                    userType: "company",
-                    userName: doc.data().companyName,
-                    userEmail: doc.data().companyEmail,
-                  });
+          docRef.get().then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+              querySnapshot.forEach((doc) => {
+                store.commit("authUser", {
+                  userType: "company",
+                  userName: doc.data().companyName,
+                  userEmail: doc.data().companyEmail,
                 });
-              } else {
-                db.collection("employee")
-                  .where("employeeEmail", "==", user.email)
+              });
+            } else {
+              if (!store.state.isLogin) {
+                db.collection("employees")
+                  .where("EmployeeEmail", "==", user.email)
                   .get()
                   .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                       store.commit("authUser", {
                         userType: "employee",
-                        userName: doc.data().employeeName,
-                        userEmail: doc.data().employeeEmail,
+                        userName: doc.data().EmployeeName,
+                        userEmail: doc.data().EmployeeEmail,
                       });
                     });
                   });
               }
-            })
+            }
+          });
         } else {
           store.commit("authLogout");
         }

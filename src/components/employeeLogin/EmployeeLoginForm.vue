@@ -1,7 +1,7 @@
 <template>
-  <div class="px-4 w-8/12">
+  <div class="px-4">
     <h2 class="text-2xl font-black text-cyan-500 mb-8">تسجيل الدخول</h2>
-    <form @submit.prevent="" class="flex flex-col">
+    <form @submit.prevent="loginForm" class="flex flex-col">
       <div class="email-input-container flex items-center w-full">
         <h5 class="mx-3 w-1/5">البريد الإلكترونى</h5>
         <input
@@ -10,6 +10,7 @@
           id="email"
           class="my-3 w-4/5 rounded-lg"
           dir="ltr"
+          v-model="email"
         />
       </div>
       <div class="password-input-container flex items-center w-full">
@@ -20,6 +21,7 @@
           id="password"
           class="my-3 w-4/5 rounded-lg"
           dir="ltr"
+          v-model="password"
         />
       </div>
       <button
@@ -33,8 +35,25 @@
 </template>
 
 <script>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import firebase from "@/firebase";
 export default {
   name: "CompanyLoginForm",
+  setup() {
+    const router = useRouter();
+    const email = ref("sara@cmoney.com");
+    const password = ref("sara@cmoney.com");
+
+    function loginForm() {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email.value, password.value)
+        .then(router.push("/"));
+    }
+
+    return { email, password, loginForm };
+  },
 };
 </script>
 

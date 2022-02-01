@@ -155,7 +155,7 @@ export default {
             .add({
               EmployeeName: registerForm.EmployeeName,
               EmployeeEmail: registerForm.EmployeeEmail.toLowerCase(),
-              CompanyEmail: store.state.userEmail,
+              CompanyName: store.state.userName,
             })
             .then(() => {
               router.push("/");

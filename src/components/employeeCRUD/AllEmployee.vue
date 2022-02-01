@@ -49,13 +49,11 @@ export default {
     const Employees = reactive([]);
 
     db.collection("employees")
-      .where("CompanyEmail", "==", store.state.userEmail)
+      .where("CompanyName", "==", store.state.userName)
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           Employees.push(doc.data());
-          console.log(`${doc.id} => ${doc.data().EmployeeEmail}`);
-          console.log(`${doc.id} => ${doc.data().EmployeeName}`);
         });
       });
     return { Employees };
