@@ -24,6 +24,11 @@ const routes = [
     name: "EmployeeCRUD",
     component: () => import("../views/EmployeeCRUD.vue"),
   },
+  {
+    path: "/AddressCRUD",
+    name: "AddressCRUD",
+    component: () => import("../views/AddressCRUD.vue"),
+  },
 ];
 
 const router = createRouter({

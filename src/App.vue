@@ -28,6 +28,7 @@ export default {
                   userType: "company",
                   userName: doc.data().companyName,
                   userEmail: doc.data().companyEmail,
+                  companyName: doc.data().companyName,
                 });
               });
             } else {
@@ -41,6 +42,7 @@ export default {
                         userType: "employee",
                         userName: doc.data().EmployeeName,
                         userEmail: doc.data().EmployeeEmail,
+                        companyName: doc.data().CompanyName,
                       });
                     });
                   });
