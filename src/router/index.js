@@ -29,6 +29,11 @@ const routes = [
     name: "AddressCRUD",
     component: () => import("../views/AddressCRUD.vue"),
   },
+  {
+    path: "/CurrencyExchange",
+    name: "CurrencyExchange",
+    component: () => import("../views/CurrencyExchange.vue"),
+  },
 ];
 
 const router = createRouter({

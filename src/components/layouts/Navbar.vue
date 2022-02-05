@@ -4,7 +4,7 @@
       <div class="flex justify-between w-full p-3">
         <router-link to="/" class="logo">
           <img
-            src="https://www.who.int/images/default-source/eios-gtm-photos/who-ar-c-h.png?sfvrsn=1f8bd18b_1"
+            src="../../assets/images/Manager-logos_transparent.png"
             alt="App Logo"
             class="w-48"
           />

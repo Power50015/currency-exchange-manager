@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import AddAddress from "../components/addressCRUD/AddAddress.vue";
-import AllAddress from '../components/addressCRUD/AllAddress.vue';
+import AddAddress from "@/components/addressCRUD/AddAddress.vue";
+import AllAddress from '@/components/addressCRUD/AllAddress.vue';
 export default {
   name: "AddressCRUD",
   components: { AddAddress, AllAddress },
@@ -22,5 +22,3 @@ export default {
 </script>
 
 <style></style>
-
-AddEmployee
