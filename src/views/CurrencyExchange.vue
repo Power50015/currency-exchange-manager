@@ -3,31 +3,43 @@
     <h2 class="text-5xl font-thin text-blue-500 my-5 text-center">
       تسجيل معامله جديده
     </h2>
+    <alert-danger v-for="error of v$.$errors" :key="error.$uid">
+      {{ error.$message }}
+    </alert-danger>
     <div class="max-h-[60vh] w-full items-center grid">
       <div class="px-4">
-        <form @submit.prevent="registerAddress" class="flex flex-col">
-          <div class="email-input-container flex items-center w-full">
+        <form
+          @submit.prevent="SaveCurrencyToNumber"
+          class="flex flex-col"
+          @change="CurrencyToNumberCalc"
+        >
+          <div class="input-container flex items-center w-full">
             <h5 class="mx-3 w-1/5">الرقم القومى للعميل</h5>
             <input
               type="text"
               name="CustomerID"
               id="CustomerID"
               class="my-3 w-4/5 rounded-lg mx-2"
-              v-model="CustomerID"
+              v-model="Form.CustomerID"
             />
           </div>
-          <div class="email-input-container flex items-center w-full">
-            <h5 class="mx-3 w-1/5">منطقه الفرع</h5>
+          <div class="input-container flex items-center w-full">
+            <h5 class="mx-3 w-1/5">المبلغ المحول</h5>
             <input
-              type="text"
-              name="AddressDetail"
-              id="AddressDetail"
+              type="number"
+              name="CurrencyFrom"
+              id="CurrencyFrom"
               class="my-3 w-2/5 rounded-lg mx-2"
+              v-model.lazy="Form.CurrencyFromNumber"
+              min="0"
+              oninput="this.value = 
+ !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null"
             />
             <select
-              name="AddressArea"
+              name="CurrencyFrom"
               class="my-3 w-2/5 rounded-lg"
-              id="AddressName"
+              id="CurrencyFrom"
+              v-model="Form.CurrencyFrom"
             >
               <option value="AED">AED</option>
               <option value="ARS">ARS</option>
@@ -83,18 +95,21 @@
               <option value="ZAR">ZAR</option>
             </select>
           </div>
-          <div class="email-input-container flex items-center w-full">
-            <h5 class="mx-3 w-1/5">منطقه الفرع</h5>
+          <div class="input-container flex items-center w-full">
+            <h5 class="mx-3 w-1/5">المحول إليه</h5>
             <input
-              type="text"
-              name="AddressDetail"
-              id="AddressDetail"
+              type="number"
+              name="CurrencyToNumberCalc"
+              id="CurrencyToNumberCalc"
               class="my-3 w-2/5 rounded-lg mx-2"
+              disabled
+              v-model="Form.CurrencyToNumber"
             />
             <select
-              name="AddressArea"
+              name="CurrencyTo"
               class="my-3 w-2/5 rounded-lg"
-              id="AddressName"
+              id="CurrencyTo"
+              v-model="Form.CurrencyTo"
             >
               <option value="AED">AED</option>
               <option value="ARS">ARS</option>
@@ -152,7 +167,7 @@
           </div>
           <button
             type="submit"
-            class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:to-cyan-500 hover:from-blue-500 focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+            class="text-white bg-gradient-to-r from-blue-500 to-cyan-500 hover:to-blue-500 hover:from-cyan-500 focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
           >
             حفظ المعالمه
           </button>
@@ -163,12 +178,79 @@
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
+import { reactive } from "@vue/reactivity";
+import useVuelidate from "@vuelidate/core";
+import { helpers, required } from "@vuelidate/validators";
+import { computed } from "@vue/runtime-core";
+import { useStore } from "vuex";
+import AlertDanger from "../components/alert/AlertDanger.vue";
+import firebase from "@/firebase";
+import { useRouter } from "vue-router";
+
 export default {
   name: "CurrencyExchange",
+  components: { AlertDanger },
   setup() {
-    const CustomerID = ref("");
-    return { CustomerID };
+    const router = useRouter();
+    const Form = reactive({
+      CustomerID: "",
+      CurrencyFromNumber: 1,
+      CurrencyFrom: "USD",
+      CurrencyToNumber: 0,
+      CurrencyTo: "EGP",
+    });
+
+    /**
+     * Data Rules
+     */
+    const rules = computed(() => {
+      return {
+        CustomerID: {
+          required: helpers.withMessage(
+            "لا يمكن ترك الرقم القومى للعميل  فارغ",
+            required
+          ),
+        },
+      };
+    });
+
+    /**
+     * Fire Vaeldtion Function
+     */
+    const v$ = useVuelidate(rules, Form);
+    const store = useStore();
+
+    function SaveCurrencyToNumber() {
+      v$.value.$touch();
+      if (v$.value.$invalid) return 0;
+      var db = firebase.firestore();
+      db.collection("currencyAction")
+        .add({
+          customerID: Form.CustomerID,
+          currencyFromNumber: Form.CurrencyFromNumber,
+          currencyFrom: Form.CurrencyFrom,
+          currencyToNumber: Form.CurrencyToNumber,
+          currencyTo: Form.CurrencyTo,
+          employeeEmail: store.state.userEmail,
+        })
+        .then(() => {
+          router.push("/");
+        });
+    }
+
+    function CurrencyToNumberCalc() {
+      fetch(
+        `https://v6.exchangerate-api.com/v6/${process.env.VUE_APP_Exchangerate}/latest/${Form.CurrencyFrom}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          Form.CurrencyToNumber = (
+            Form.CurrencyFromNumber * data.conversion_rates[Form.CurrencyTo]
+          ).toFixed(2);
+        });
+    }
+
+    return { v$, Form, CurrencyToNumberCalc, SaveCurrencyToNumber };
   },
 };
 </script>
