@@ -1,7 +1,7 @@
 <template>
   <div class="my-8">
-      <h2 class="text-2xl font-black text-cyan-500 mb-8">بيانات الموظفين</h2>
-    <div >
+    <h2 class="text-2xl font-black text-cyan-500 mb-8">بيانات الموظفين</h2>
+    <div>
       <table class="min-w-full leading-normal">
         <thead>
           <tr>

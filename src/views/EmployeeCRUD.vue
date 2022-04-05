@@ -7,14 +7,14 @@
       <add-employee />
     </div>
     <div class="w-full">
-      <all-employee/>
+      <all-employee />
     </div>
   </div>
 </template>
 
 <script>
 import AddEmployee from "../components/employeeCRUD/AddEmployee.vue";
-import AllEmployee from '../components/employeeCRUD/AllEmployee.vue';
+import AllEmployee from "../components/employeeCRUD/AllEmployee.vue";
 export default {
   name: "EmployeeCRUD",
   components: { AddEmployee, AllEmployee },

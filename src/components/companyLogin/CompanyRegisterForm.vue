@@ -59,7 +59,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import firebase from "@/firebase";
 import { useRouter } from "vue-router";
 
@@ -75,94 +75,83 @@ import { reactive } from "@vue/reactivity";
 import { computed } from "@vue/runtime-core";
 import AlertDanger from "../alert/AlertDanger.vue";
 
-export default {
-  components: { AlertDanger },
-  name: "CompanyRegisterForm",
-  setup() {
-    const router = useRouter();
+const router = useRouter();
 
+/**
+ * Form Data Model
+ */
+const registerForm = reactive({
+  CompanyName: "",
+  CompanyEmail: "",
+  CompanyPassword: "",
+  ConfirmCompanyPassword: "",
+});
 
-    /**
-     * Form Data Model
-     */
-    const registerForm = reactive({
-      CompanyName: "",
-      CompanyEmail: "",
-      CompanyPassword: "",
-      ConfirmCompanyPassword: "",
-    });
+/**
+ * Data Rules
+ */
+const rules = computed(() => {
+  return {
+    CompanyName: {
+      required: helpers.withMessage("لا يمكن ترك أسم الشركه فارغ", required),
+      minLengthValue: helpers.withMessage(
+        "أسم الشركه يجب أن لا يقل عن 3 أحرف",
+        minLength(3)
+      ),
+    },
+    CompanyEmail: {
+      required: helpers.withMessage(
+        "لا يمكن ترك البريد الإلكترونى للشركه فارغ",
+        required
+      ),
+      email: helpers.withMessage("يجب أن يكون الحقل بريد إلكترونى", email),
+      minLengthValue: helpers.withMessage(
+        "يجب أن لا يقل  البريد الإلكترونى عن 3 أحرف",
+        minLength(3)
+      ),
+    },
+    CompanyPassword: {
+      required: helpers.withMessage("لا يمكن كلمه المرور", required),
+      minLengthValue: helpers.withMessage(
+        "يجب أن لا يقل كلمه المرور عن 8 أحرف",
+        minLength(8)
+      ),
+    },
+    ConfirmCompanyPassword: {
+      sameAs: helpers.withMessage(
+        "يجب أن يتطابق كلمتان المرور",
+        sameAs(registerForm.CompanyPassword)
+      ),
+    },
+  };
+});
 
-    /**
-     * Data Rules
-     */
-    const rules = computed(() => {
-      return {
-        CompanyName: {
-          required: helpers.withMessage(
-            "لا يمكن ترك أسم الشركه فارغ",
-            required
-          ),
-          minLengthValue: helpers.withMessage(
-            "أسم الشركه يجب أن لا يقل عن 3 أحرف",
-            minLength(3)
-          ),
-        },
-        CompanyEmail: {
-          required: helpers.withMessage(
-            "لا يمكن ترك البريد الإلكترونى للشركه فارغ",
-            required
-          ),
-          email: helpers.withMessage("يجب أن يكون الحقل بريد إلكترونى", email),
-          minLengthValue: helpers.withMessage(
-            "يجب أن لا يقل  البريد الإلكترونى عن 3 أحرف",
-            minLength(3)
-          ),
-        },
-        CompanyPassword: {
-          required: helpers.withMessage("لا يمكن كلمه المرور", required),
-          minLengthValue: helpers.withMessage(
-            "يجب أن لا يقل كلمه المرور عن 8 أحرف",
-            minLength(8)
-          ),
-        },
-        ConfirmCompanyPassword: {
-          sameAs: helpers.withMessage(
-            "يجب أن يتطابق كلمتان المرور",
-            sameAs(registerForm.CompanyPassword)
-          ),
-        },
-      };
-    });
+/**
+ * Fire Vaeldtion Function
+ */
+const v$ = useVuelidate(rules, registerForm);
 
-    /**
-     * Fire Vaeldtion Function
-     */
-    const v$ = useVuelidate(rules, registerForm);
-
-    function registerCompany() {
-      v$.value.$touch();
-      if (v$.value.$invalid) return 0;
-      var db = firebase.firestore();
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(
-          registerForm.CompanyEmail,
-          registerForm.CompanyPassword
-        )
+function registerCompany() {
+  v$.value.$touch();
+  if (v$.value.$invalid) return 0;
+  var db = firebase.firestore();
+  firebase
+    .auth()
+    .createUserWithEmailAndPassword(
+      registerForm.CompanyEmail,
+      registerForm.CompanyPassword
+    )
+    .then(() => {
+      db.collection("companies")
+        .add({
+          companyName: registerForm.CompanyName,
+          companyEmail: registerForm.CompanyEmail.toLowerCase(),
+        })
         .then(() => {
-          db.collection("companies")
-            .add({
-              companyName: registerForm.CompanyName,
-              companyEmail: registerForm.CompanyEmail.toLowerCase(),
-            })
-            .then(() => {
-              router.push("/");
-            });
+          router.push("/");
         });
-    }
-    return { registerForm, v$, registerCompany };
-  },
-};
+    });
+}
 </script>
 
 <style></style>

@@ -15,6 +15,11 @@ const routes = [
     component: () => import("../views/CompanyLogin.vue"),
   },
   {
+    path: "/CompanyRegister",
+    name: "CompanyRegister",
+    component: () => import("../views/CompanyRegister.vue"),
+  },
+  {
     path: "/EmployeeLogin",
     name: "EmployeeLogin",
     component: () => import("../views/EmployeeLogin.vue"),
@@ -28,6 +33,11 @@ const routes = [
     path: "/AddressCRUD",
     name: "AddressCRUD",
     component: () => import("../views/AddressCRUD.vue"),
+  },
+  {
+    path: "/AddressAdd",
+    name: "AddressAdd",
+    component: () => import("../views/AddressAdd.vue"),
   },
   {
     path: "/CurrencyExchange",

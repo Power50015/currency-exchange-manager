@@ -13,23 +13,28 @@
           <router-link
             to="EmployeeLogin"
             class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:to-cyan-500 hover:from-blue-500 focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
-            v-if="!IsLogin">تسجيل الدخول / موظف</router-link
+            v-if="!IsLogin"
+            >تسجيل الدخول / موظف</router-link
           >
           <router-link
             to="EmployeeCRUD"
             class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:to-cyan-500 hover:from-blue-500 focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
-            v-if="IsLogin && UserType == 'company'">بيانات الموظفين</router-link
+            v-if="IsLogin && UserType == 'company'"
+            >بيانات الموظفين</router-link
           >
           <router-link
             to="AddressCRUD"
             class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:to-cyan-500 hover:from-blue-500 focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
-            v-if="IsLogin && UserType == 'employee'">العناوين</router-link
+            v-if="IsLogin && UserType == 'employee'"
+            >العناوين</router-link
           >
           <button
             @click="logout"
             class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:to-cyan-500 hover:from-blue-500 focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
-            v-if="IsLogin">تسجيل خروج</button
+            v-if="IsLogin"
           >
+            تسجيل خروج
+          </button>
         </div>
       </div>
     </div>

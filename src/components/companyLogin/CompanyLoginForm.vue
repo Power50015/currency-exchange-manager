@@ -1,5 +1,5 @@
 <template>
-  <div class="px-4">
+  <div class="border-l-4 px-4">
     <h2 class="text-2xl font-black text-cyan-500 mb-8">تسجيل الدخول</h2>
     <form @submit.prevent="loginForm" class="flex flex-col">
       <div class="email-input-container flex items-center w-full">
@@ -49,7 +49,7 @@ export default {
       firebase
         .auth()
         .signInWithEmailAndPassword(email.value, password.value)
-        .then( router.push("/"));
+        .then(router.push("/"));
     }
 
     return { email, password, loginForm };
