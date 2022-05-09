@@ -27,6 +27,7 @@
           </div>
         </div>
         <div v-if="IsLogin" class="text-center">
+        <img :src="UserImg" width="300" height="300" />
           <h3 class="text-3xl leading-[5rem] font-black text-cyan-500">
             {{ UserName }}
           </h3>
@@ -72,8 +73,8 @@ export default {
     const UserName = computed(() => store.state.userName);
     const UserEmail = computed(() => store.state.userEmail);
     const UserCompany = computed(() => store.state.userCompany);
-
-    return { IsLogin, UserType, UserName, UserEmail, UserCompany };
+    const UserImg = computed(() => store.state.userImg);
+    return { IsLogin, UserType, UserName, UserEmail, UserCompany, UserImg };
   },
 };
 </script>
@@ -93,5 +94,8 @@ export default {
   to {
     transform: rotate(360deg);
   }
+}
+.header-content{
+  width: 50% !important;
 }
 </style>

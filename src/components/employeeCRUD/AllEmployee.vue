@@ -15,6 +15,10 @@
             >
               بريد الإلكترونى للموظف
             </th>
+            <th
+              class="px-5 py-3 border-b-2 text-center border-gray-200 bg-gray-100 text-xs font-semibold text-gray-700 uppercase tracking-wider"
+            >
+              صوره الموظف            </th>
           </tr>
         </thead>
         <tbody>
@@ -28,6 +32,11 @@
               class="px-5 py-5 border-b text-center border-gray-200 bg-white text-sm"
             >
               {{ employee.EmployeeEmail }}
+            </td>
+            <td
+              class="px-5 py-5 border-b text-center border-gray-200 bg-white text-sm"
+            >
+              <img :src="employee.companyImage" width="100">
             </td>
           </tr>
         </tbody>

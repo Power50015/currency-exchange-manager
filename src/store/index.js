@@ -8,6 +8,7 @@ export default createStore({
       userName: "",
       userEmail: "",
       userCompany: "",
+      userImg: "",
     };
   },
   mutations: {
@@ -17,6 +18,7 @@ export default createStore({
       state.userName = payload.userName;
       state.userEmail = payload.userEmail;
       state.userCompany = payload.companyName;
+      state.userImg = payload.userImg;
     },
     authLogout(state) {
       state.isLogin = false;
@@ -24,6 +26,7 @@ export default createStore({
       state.userName = "";
       state.userEmail = "";
       state.userCompany = "";
+      state.userImg = "";
     },
   },
   actions: {},

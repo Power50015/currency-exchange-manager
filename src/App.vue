@@ -29,6 +29,7 @@ export default {
                   userName: doc.data().companyName,
                   userEmail: doc.data().companyEmail,
                   companyName: doc.data().companyName,
+                  userImg: doc.data().companyImage
                 });
               });
             } else {
@@ -43,6 +44,7 @@ export default {
                         userName: doc.data().EmployeeName,
                         userEmail: doc.data().EmployeeEmail,
                         companyName: doc.data().CompanyName,
+                        userImg: doc.data().companyImage
                       });
                     });
                   });

@@ -16,6 +16,24 @@
           v-model="registerForm.CompanyName"
         />
       </div>
+      <!-- Start image-->
+      <div class="mb-3">
+        <label for="formFile" class="form-label">الصورة الشخصيه</label>
+        <div class="flex">
+          <h6 class="mb-3 text-white">
+            حاله رفع الصوره :
+            <span v-if="imgUpload == 100">أكتمل</span>
+          </h6>
+        </div>
+        <input
+          class="form-control"
+          type="file"
+          id="formFile"
+          accept="image/jpeg"
+          @change="DetectFiles($event.target.files)"
+        />
+      </div>
+      <!-- End image-->
       <div class="email-input-container flex items-center w-full">
         <h5 class="mx-3 w-1/5">البريد الإلكترونى</h5>
         <input
@@ -50,6 +68,7 @@
         />
       </div>
       <button
+        :disabled="btn"
         type="submit"
         class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:to-cyan-500 hover:from-blue-500 focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
       >
@@ -71,15 +90,17 @@ import {
   minLength,
   sameAs,
 } from "@vuelidate/validators";
-import { reactive } from "@vue/reactivity";
+import { reactive, ref } from "@vue/reactivity";
 import { computed } from "@vue/runtime-core";
 import AlertDanger from "../alert/AlertDanger.vue";
 
 const router = useRouter();
-
+const db = firebase.firestore();
+const btn = ref(true);
 /**
  * Form Data Model
  */
+let userImg = ref("");
 const registerForm = reactive({
   CompanyName: "",
   CompanyEmail: "",
@@ -146,11 +167,33 @@ function registerCompany() {
         .add({
           companyName: registerForm.CompanyName,
           companyEmail: registerForm.CompanyEmail.toLowerCase(),
+          companyImage: userImg.value,
         })
         .then(() => {
           router.push("/");
         });
     });
+}
+
+function DetectFiles(img) {
+  const imgData = img[0];
+  const storageRef = firebase.storage().ref(`${imgData.name}`).put(imgData);
+  storageRef.on(
+    `state_changed`,
+    (snapshot) => {
+      console.log(snapshot);
+    },
+    (error) => {
+      console.log(error.message);
+    },
+    () => {
+      storageRef.snapshot.ref.getDownloadURL().then((downloadURL) => {
+        console.log("File available at", downloadURL);
+        userImg.value = downloadURL;
+        btn.value = false;
+      });
+    }
+  );
 }
 </script>
 

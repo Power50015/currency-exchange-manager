@@ -16,6 +16,24 @@
           v-model="registerForm.EmployeeName"
         />
       </div>
+      <!-- Start image-->
+      <div class="mb-3">
+        <label for="formFile" class="form-label">الصورة الشخصيه</label>
+        <div class="flex">
+          <h6 class="mb-3 text-white">
+            حاله رفع الصوره :
+            <span v-if="imgUpload == 100">أكتمل</span>
+          </h6>
+        </div>
+        <input
+          class="form-control"
+          type="file"
+          id="formFile"
+          accept="image/jpeg"
+          @change="DetectFiles($event.target.files)"
+        />
+      </div>
+      <!-- End image-->
       <div class="email-input-container flex items-center w-full">
         <h5 class="mx-3 w-1/5">البريد الإلكترونى</h5>
         <input
@@ -72,7 +90,7 @@ import {
   minLength,
   sameAs,
 } from "@vuelidate/validators";
-import { reactive } from "@vue/reactivity";
+import { reactive,ref } from "@vue/reactivity";
 import { computed } from "@vue/runtime-core";
 import AlertDanger from "../alert/AlertDanger.vue";
 
@@ -81,6 +99,8 @@ export default {
   name: "AddEmployee",
   setup() {
     const router = useRouter();
+    const db = firebase.firestore();
+    const btn = ref(true);
 
     /**
      * Form Data Model
@@ -95,6 +115,7 @@ export default {
     /**
      * Data Rules
      */
+    let userImg = ref("");
     const rules = computed(() => {
       return {
         EmployeeName: {
@@ -156,13 +177,36 @@ export default {
               EmployeeName: registerForm.EmployeeName,
               EmployeeEmail: registerForm.EmployeeEmail.toLowerCase(),
               CompanyName: store.state.userName,
+              companyImage: userImg.value,
             })
             .then(() => {
               router.push("/");
             });
         });
     }
-    return { registerForm, v$, registerEmployee };
+
+    function DetectFiles(img) {
+      const imgData = img[0];
+      const storageRef = firebase.storage().ref(`${imgData.name}`).put(imgData);
+      storageRef.on(
+        `state_changed`,
+        (snapshot) => {
+          console.log(snapshot);
+        },
+        (error) => {
+          console.log(error.message);
+        },
+        () => {
+          storageRef.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            console.log("File available at", downloadURL);
+            userImg.value = downloadURL;
+            btn.value = false;
+          });
+        }
+      );
+    }
+
+    return { registerForm, v$, registerEmployee, DetectFiles };
   },
 };
 </script>
