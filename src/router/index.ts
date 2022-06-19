@@ -18,6 +18,11 @@ const router = createRouter({
       name: "CompanyRegister",
       component: () => import("../views/CompanyRegisterView.vue"),
     },
+    {
+      path: "/profile",
+      name: "Profile",
+      component: () => import("../views/ProfileView.vue"),
+    },
   ],
 });
 

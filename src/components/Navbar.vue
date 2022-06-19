@@ -5,7 +5,7 @@
         <router-link
           class="btn btn-outline btn-primary"
           to="/"
-          v-if="authStore.isLogin"
+          v-if="authStore.type == 'companies'"
           >بيانات الموظفين</router-link
         >
         <router-link
@@ -35,7 +35,7 @@
             class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52 right-[-160px]"
           >
             <li>
-              <router-link to="/"> {{ authStore.name }} </router-link>
+              <router-link to="/profile"> {{ authStore.name }} </router-link>
             </li>
             <li><span @click="logout"> تسجيل الخروج </span></li>
           </ul>
@@ -65,6 +65,7 @@ const auth = getAuth();
 
 function logout() {
   signOut(auth).then(() => {
+    authStore.id = "";
     authStore.name = "";
     authStore.email = "";
     authStore.img = "";

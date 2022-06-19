@@ -43,6 +43,7 @@ const unsub = await onAuthStateChanged(auth, async (user) => {
     } else {
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
+        authStore.id = doc.id;
         authStore.name = doc.data().companyName;
         authStore.email = doc.data().companyEmail;
         authStore.img = doc.data().companyImage;
@@ -53,7 +54,7 @@ const unsub = await onAuthStateChanged(auth, async (user) => {
     }
   }
   authStore.isloaded = true;
-  unsub();
+  unsub();  
 });
 
 export const useAuthStore = defineStore({
@@ -61,6 +62,7 @@ export const useAuthStore = defineStore({
   state: () => ({
     isloaded: false,
     isLogin: false,
+    id:"",
     name: "",
     email: "",
     password: "",
