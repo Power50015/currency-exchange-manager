@@ -28,6 +28,16 @@ const router = createRouter({
       name: "Employeies",
       component: () => import("../views/EmployeiesView.vue"),
     },
+    {
+      path: "/login",
+      name: "EmployeiesLogin",
+      component: () => import("../views/EmployeiesLoginView.vue"),
+    },
+    {
+      path: "/add-address",
+      name: "AddAddress",
+      component: () => import("../views/AddAddressView.vue"),
+    },
   ],
 });
 

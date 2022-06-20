@@ -26,8 +26,8 @@ const db = getFirestore();
 const unsub = await onAuthStateChanged(auth, async (user) => {
   const authStore = useAuthStore();
   if (user) {
-console.log(user.email);
-authStore.isLogin = true;
+    console.log(user.email);
+    authStore.isLogin = true;
 
     // debugger
     const q = query(
@@ -37,9 +37,26 @@ authStore.isLogin = true;
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) {
       const q = query(
-        collection(db, "companies"),
-        where("companyEmail", "==", user.email)
+        collection(db, "employees"),
+        where("EmployeeEmail", "==", user.email)
       );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        authStore.id = doc.id;
+        authStore.name = doc.data().EmployeeName;
+        authStore.email = doc.data().EmployeeEmail;
+        authStore.img = doc.data().EmployeeImage;
+        authStore.phone = doc.data().EmployeePhone;
+        authStore.percentage = doc.data().CompanyPercentage;
+
+        authStore.CompanyName = doc.data().CompanyName;
+        authStore.CompanyEmail = doc.data().CompanyEmail;
+        authStore.CompanyImage = doc.data().CompanyImage;
+        authStore.CompanyPhone = doc.data().CompanyPhone;
+        authStore.type = "employees";
+        authStore.isLogin = true;
+        authStore.isloaded = true;
+      });
     } else {
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
@@ -73,8 +90,11 @@ export const useAuthStore = defineStore({
     phone: "",
     percentage: "",
     type: "",
-    company: "",
     img: "",
+    CompanyName: "",
+    CompanyEmail: "",
+    CompanyImage: "",
+    CompanyPhone: "",
   }),
   getters: {},
   actions: {},

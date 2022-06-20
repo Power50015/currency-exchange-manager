@@ -200,6 +200,7 @@ function addUser() {
                 CompanyEmail: authStore.email,
                 CompanyImage: authStore.img,
                 CompanyPhone: authStore.phone,
+                CompanyPercentage: Number(authStore.percentage),
                 EmployeeName: name.value,
                 EmployeeEmail: email.value,
                 EmployeeImage: imgURL.value,

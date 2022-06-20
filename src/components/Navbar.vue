@@ -10,7 +10,7 @@
         >
         <router-link
           class="btn btn-outline btn-primary"
-          to="/"
+          to="/login"
           v-if="!authStore.isLogin"
           >تسجيل الدخول موظفين</router-link
         >
@@ -34,8 +34,8 @@
             tabindex="0"
             class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52 right-[-160px]"
           >
-            <li>
-              <router-link to="/profile"> {{ authStore.name }} </router-link>
+            <li v-if="authStore.type == 'companies'">
+              <router-link to="/profile" > {{ authStore.name }} </router-link>
             </li>
             <li><span @click="logout"> تسجيل الخروج </span></li>
           </ul>
