@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto">
-    <div class="flex justify-around mt-5 pt-5  flex-wrap">
+    <div class="flex justify-around mt-5 pt-5 flex-wrap">
       <div class="card w-96 bg-base-100 shadow-xl image-full m-3">
         <figure>
           <img
@@ -10,7 +10,7 @@
         </figure>
         <div class="card-body">
           <h2 class="card-title text-5xl">الفروع</h2>
-          <p class="text-5xl mt-5 pt-5">99</p>
+          <p class="text-5xl mt-5 pt-5">{{ addressCount }}</p>
         </div>
       </div>
       <div class="card w-96 bg-base-100 shadow-xl mt-[30px]">
@@ -20,50 +20,10 @@
         <div class="card-body items-center text-center">
           <h2 class="card-title">{{ authStore.name }}</h2>
           <p>{{ authStore.email }}</p>
-          <p>نسبه الشركه : 2%</p>
+          <p>{{ authStore.phone }}</p>
+          <p>نسبه الشركه : {{ authStore.percentage }}%</p>
         </div>
-        <div class="stats shadow">
-          <div class="stat">
-            <div class="stat-figure text-secondary">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                class="inline-block w-8 h-8 stroke-current"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                ></path>
-              </svg>
-            </div>
-            <div class="stat-title">الحجوزات</div>
-            <div class="stat-value">31</div>
-          </div>
-
-
-          <div class="stat">
-            <div class="stat-figure text-secondary">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                class="inline-block w-8 h-8 stroke-current"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
-                ></path>
-              </svg>
-            </div>
-            <div class="stat-title">العمليات</div>
-            <div class="stat-value">200</div>
-          </div>
-        </div>
+        
       </div>
       <div class="card w-96 bg-base-100 shadow-xl image-full m-3">
         <figure>
@@ -74,9 +34,9 @@
         </figure>
         <div class="card-body">
           <h2 class="card-title text-5xl">الموظفين</h2>
-          <p class="text-5xl mt-5 pt-5">99</p>
+          <p class="text-5xl mt-5 pt-5">{{empoleyCount}}</p>
           <div class="card-actions justify-end">
-            <button class="btn btn-primary">بيانات الموظفين</button>
+            <router-link to="/employeies" class="btn btn-primary">بيانات الموظفين</router-link>
           </div>
         </div>
       </div>
@@ -128,19 +88,28 @@ import { useAuthStore } from "@/stores/auth";
 const authStore = useAuthStore();
 const db = getFirestore();
 const addressData = reactive([] as any[]);
+const addressCount = ref();
+const empoleyCount = ref();
+getData();
 
-getAddressData();
-
-async function getAddressData() {
+async function getData() {
   addressData.length = 0;
   const q = query(
     collection(db, "address"),
-    where("CompanyName", "==", authStore.name)
+    where("CompanyEmail", "==", authStore.email)
   );
   const querySnapshot = await getDocs(q);
+  addressCount.value = querySnapshot.size;
   querySnapshot.forEach((doc) => {
     addressData.push(doc.data());
   });
+  //Empoley
+  const qEmpoley = query(
+    collection(db, "employees"),
+    where("CompanyEmail", "==", authStore.email)
+  );
+  const querySnapshotEmpoley = await getDocs(qEmpoley);
+  empoleyCount.value = querySnapshotEmpoley.size;
 }
 </script>
 

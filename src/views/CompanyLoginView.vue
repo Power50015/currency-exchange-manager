@@ -58,8 +58,8 @@ const auth = getAuth();
 const db = getFirestore();
 const router = useRouter();
 
-const email = ref("learnvue@ewe.com");
-const password = ref("learnvue@ewe.com");
+const email = ref("admin@cmoney.com");
+const password = ref("admin@cmoney.com");
 
 function login() {
   signInWithEmailAndPassword(auth, email.value, password.value)
@@ -75,6 +75,8 @@ function login() {
         store.email = email.value;
         store.img = doc.data().companyImage;
         store.password = password.value;
+        store.percentage = doc.data().companyPercentage;
+        store.phone = doc.data().companyPhone;
         store.isLogin = true;
         store.type = "companies";
       });

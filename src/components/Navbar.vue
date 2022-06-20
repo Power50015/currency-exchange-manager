@@ -4,7 +4,7 @@
       <div class="navbar-start">
         <router-link
           class="btn btn-outline btn-primary"
-          to="/"
+          to="/employeies"
           v-if="authStore.type == 'companies'"
           >بيانات الموظفين</router-link
         >

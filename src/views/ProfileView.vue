@@ -20,6 +20,17 @@
           </div>
           <div class="form-control">
             <label class="label">
+              <span class="label-text">رقم الهاتف</span>
+            </label>
+            <input
+              type="text"
+              placeholder="phone"
+              class="input input-bordered"
+              v-model="phone"
+            />
+          </div>
+          <div class="form-control">
+            <label class="label">
               <span class="label-text">البريد الإلكترونى</span>
             </label>
             <input
@@ -108,6 +119,7 @@ const router = useRouter();
 const store = useAuthStore();
 
 const name = ref<string>(store.name);
+const phone = ref<string>(store.phone);
 
 const imgURL = ref<string>("");
 const imgData = reactive([]);
@@ -141,12 +153,15 @@ async function editProfile() {
             companyEmail: store.email,
             companyImage: imgURL.value,
             companyPassword: store.password,
+            companyPhone: phone.value,
+            companyPercentage: Number(store.percentage),
           }).then(() => {
             createToast("تم تعديل حساب الشركه", {
               type: "success",
             });
             store.name = name.value;
             store.img = imgURL.value;
+            store.phone = phone.value;
           });
         });
       }
@@ -157,11 +172,14 @@ async function editProfile() {
       companyEmail: store.email,
       companyImage: store.img,
       companyPassword: store.password,
+      companyPhone: phone.value,
+      companyPercentage: Number(store.percentage),
     }).then(() => {
       createToast("تم تعديل حساب الشركه", {
         type: "success",
       });
       store.name = name.value;
+      store.phone = phone.value;
     });
   }
 }

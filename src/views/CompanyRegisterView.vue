@@ -19,13 +19,35 @@
           </div>
           <div class="form-control">
             <label class="label">
-              <span class="label-text">البريد الإلكترونى</span>
+              <span class="label-text">البريد الإلكترونى للشركه</span>
             </label>
             <input
-              type="email"
+              type="text"
               placeholder="email"
               class="input input-bordered"
               v-model="email"
+            />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">رقم الهاتف</span>
+            </label>
+            <input
+              type="text"
+              placeholder="phone"
+              class="input input-bordered"
+              v-model="phone"
+            />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">نسبه الربح</span>
+            </label>
+            <input
+              type="number"
+              placeholder="نسبه الربح"
+              class="input input-bordered"
+              v-model="percentage"
             />
           </div>
           <div class="form-control">
@@ -75,7 +97,9 @@
             <button class="btn btn-primary" @click="addUser" :disabled="!btn">
               تسجيل الدخول
             </button>
-            <router-link to="/company-login" class="mt-3 link text-indigo-600">لدى حساب بالفعل</router-link>
+            <router-link to="/company-login" class="mt-3 link text-indigo-600"
+              >لدى حساب بالفعل</router-link
+            >
           </div>
         </div>
       </div>
@@ -116,6 +140,8 @@ const store = useAuthStore();
 const name = ref<string>("");
 const email = ref<string>("");
 const password = ref<string>("");
+const phone = ref<string>("");
+const percentage = ref<string>("");
 
 const imgURL = ref<string>("");
 const imgData = reactive([]);
@@ -150,19 +176,22 @@ function addUser() {
               companyEmail: email.value,
               companyImage: imgURL.value,
               companyPassword: password.value,
+              companyPhone: phone.value,
+              companyPercentage:  Number(percentage.value),
             }).then((data) => {
               store.id = data.id;
               store.name = name.value;
               store.email = email.value;
               store.img = imgURL.value;
               store.password = password.value;
+              store.phone = phone.value;
+              store.percentage = percentage.value;
               store.isLogin = true;
               store.type = "companies";
               router.push("/");
               createToast("تم إضافه الشركه", {
                 type: "success",
               });
-              
             });
           })
           .catch((error) => {

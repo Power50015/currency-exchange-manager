@@ -1,6 +1,6 @@
 <template>
   <Navbar />
-  <RouterView />
+  <RouterView v-if="auth.isloaded"/>
 </template>
 
 <script setup lang="ts">

@@ -20,15 +20,15 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 
-import { createToast } from "mosha-vue-toastify";
-import "mosha-vue-toastify/dist/style.css";
-
 const auth = getAuth();
 const db = getFirestore();
 
 const unsub = await onAuthStateChanged(auth, async (user) => {
   const authStore = useAuthStore();
   if (user) {
+console.log(user.email);
+authStore.isLogin = true;
+
     // debugger
     const q = query(
       collection(db, "companies"),
@@ -47,14 +47,18 @@ const unsub = await onAuthStateChanged(auth, async (user) => {
         authStore.name = doc.data().companyName;
         authStore.email = doc.data().companyEmail;
         authStore.img = doc.data().companyImage;
+        authStore.phone = doc.data().companyPhone;
+        authStore.percentage = doc.data().companyPercentage;
         authStore.password = doc.data().companyPassword;
         authStore.type = "companies";
         authStore.isLogin = true;
+        authStore.isloaded = true;
       });
     }
+  } else {
+    authStore.isloaded = true;
   }
-  authStore.isloaded = true;
-  unsub();  
+  unsub();
 });
 
 export const useAuthStore = defineStore({
@@ -62,10 +66,12 @@ export const useAuthStore = defineStore({
   state: () => ({
     isloaded: false,
     isLogin: false,
-    id:"",
+    id: "",
     name: "",
     email: "",
     password: "",
+    phone: "",
+    percentage: "",
     type: "",
     company: "",
     img: "",
