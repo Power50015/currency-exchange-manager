@@ -14,6 +14,18 @@
           v-if="!authStore.isLogin"
           >تسجيل الدخول موظفين</router-link
         >
+        <router-link
+          class="btn btn-outline btn-primary mx-3"
+          to="/currency-action"
+          v-if="authStore.type == 'employees'"
+          >معاملات</router-link
+        >
+        <router-link
+          class="btn btn-outline btn-primary"
+          to="/reservations"
+          v-if="authStore.type == 'employees'"
+          >الحجوزات</router-link
+        >
       </div>
       <div class="navbar-center flex justify-center">
         <router-link to="/"

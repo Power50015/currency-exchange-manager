@@ -38,6 +38,16 @@ const router = createRouter({
       name: "AddAddress",
       component: () => import("../views/AddAddressView.vue"),
     },
+    {
+      path: "/currency-action",
+      name: "CurrencyAction",
+      component: () => import("../views/CurrencyActionView.vue"),
+    },
+    {
+      path: "/reservations",
+      name: "Reservations",
+      component: () => import("../views/ReservationsView.vue"),
+    },
   ],
 });
 
